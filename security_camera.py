@@ -35,7 +35,7 @@ while True:
         else:
             detection=True
             current_time=datetime.datetime.now().strftime("%d-%m-%Y-%H-%M-%S")
-            out=cv2.VideoWriter(f"videos/{current_time}.mp4",fourcc,20,frame_size)
+            out=cv2.VideoWriter(f"videos/{current_time}.mp4",fourcc,20,frame_size)#Make a folder for yor videos in order to keep everything clean 
             print("Started recording")
     elif pose_found== False:
         if timer_started:

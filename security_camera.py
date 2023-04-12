@@ -2,7 +2,7 @@ import cv2
 import pose_model as pm
 import datetime
 import time
-
+from mail_sender import EmailSender
 
 
 
@@ -12,7 +12,7 @@ frame_size=(int(cam.get(3)),int(cam.get(4)))
 c_time=0
 p_time=0
 detector=pm.poseDetector()
-
+email_sender=EmailSender()
 
 
 
@@ -21,7 +21,7 @@ detector=pm.poseDetector()
 detection=False
 detection_stopped_time=None
 timer_started=False
-seconds=7
+seconds=4
 fourcc=cv2.VideoWriter_fourcc(*"mp4v")
 
 
@@ -35,8 +35,9 @@ while True:
         else:
             detection=True
             current_time=datetime.datetime.now().strftime("%d-%m-%Y-%H-%M-%S")
-            out=cv2.VideoWriter(f"videos/{current_time}.mp4",fourcc,20,frame_size)#Make a folder for yor videos in order to keep everything clean 
+            out=cv2.VideoWriter(f"videos/{current_time}.mp4",fourcc,20,frame_size)#Make a folder for videos in order to keep everything clean 
             print("Started recording")
+            email_sender.send_email("@youremail")
     elif pose_found== False:
         if timer_started:
             if time.time()-detection_stopped_time>=seconds:

@@ -21,7 +21,7 @@ email_sender=EmailSender()
 detection=False
 detection_stopped_time=None
 timer_started=False
-seconds=4
+seconds=7
 fourcc=cv2.VideoWriter_fourcc(*"mp4v")
 
 
@@ -37,14 +37,14 @@ while True:
             current_time=datetime.datetime.now().strftime("%d-%m-%Y-%H-%M-%S")
             out=cv2.VideoWriter(f"videos/{current_time}.mp4",fourcc,20,frame_size)#Make a folder for videos in order to keep everything clean 
             print("Started recording")
-            email_sender.send_email("@youremail")
-    elif pose_found== False:
+            email_sender.send_email("person@mail.com")# A person you want to send the notification
+    elif pose_found == False:
         if timer_started:
             if time.time()-detection_stopped_time>=seconds:
                 detection=False
                 timer_started=False
                 out.release()
-                print("Stopped Recording")
+                #print("Stopped Recording")
         else:
             timer_started=True
             detection_stopped_time=time.time()

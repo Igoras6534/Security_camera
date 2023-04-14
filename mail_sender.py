@@ -15,7 +15,7 @@ class EmailSender():
         self.simple_email_context = ssl.create_default_context()
 
     def send_email(self, email_to):
-        message= "Someone has appeared on your camera "
+        message= "Someone has appeared on your camera. "
         try:
             # Connect to the server
             #print("Connecting to server...")

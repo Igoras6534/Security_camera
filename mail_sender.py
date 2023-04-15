@@ -1,12 +1,12 @@
 import smtplib
 import ssl
 import os
-
+from email.message import EmailMessage
 
 
 class EmailSender():
     def __init__(self):
-        self.smtp_port = 587  # Standard secure SMTP port
+        self.smtp_port = 465  # Standard secure SMTP port
         self.smtp_server = "smtp.gmail.com" # Google SMTP Server
 
         self.pswd=os.environ.get('SMTP_PASSW') #SMTP email adress password
@@ -16,40 +16,47 @@ class EmailSender():
 
     def send_email(self, email_to):
         message= "Someone has appeared on your camera. "
-        try:
-            # Connect to the server
-            #print("Connecting to server...")
-            TIE_server = smtplib.SMTP(self.smtp_server, self.smtp_port)
-            TIE_server.starttls(context=self.simple_email_context)
-            TIE_server.login(self.email_from, self.pswd)
-            #print("Connected to server :-)")   
-            # Send the actual email
-            #print(f"Sending email to - {email_to}")
-            TIE_server.sendmail(self.email_from, email_to, message)
-            print(f"Email successfully sent to - {email_to}")
-        # If there's an error, print it out
-        except Exception as e:
-            print(e)
+        subject = 'Security camera started recording!'
+        msg = EmailMessage()
+        msg['From'] = self.email_from
+        msg['To'] = email_to
+        msg['Subject'] = subject
+        msg.set_content(message)
 
-        # Close the port
-        finally:
-            TIE_server.quit()
-    def send_video(self):
-        pass
+        # Add SSL (layer of security)
+        context = ssl.create_default_context()
+
+        # Log in and send the email
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
+            smtp.login(self.email_from,self.pswd)
+            smtp.sendmail(self.email_from, email_to, msg.as_string()) 
+            print("Email has been successfully sended :-)")
 
 
+    def send_video(self,email_to,path):
+        message= "Here is a video of the latest activity."
+        subject = 'Security camera has stopped recording.'
+        msg = EmailMessage()
+        msg['From'] = self.email_from
+        msg['To'] = email_to
+        msg['Subject'] = subject
+        msg.set_content(message)
 
+        # Add SSL (layer of security)
+        context = ssl.create_default_context()
 
-
-
+        with open(f'videos/{path}.mp4','rb') as f:
+            file_data=f.read()
+            file_name=f.name
+        msg.add_attachment(file_data,maintype='video',subtype='mp4',filename=file_name)
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
+            smtp.login(self.email_from,self.pswd)
+            smtp.send_message(msg)
+        print("Stopped recording")
+        print("Email with video has been successfully sended :-)")
 
 def main():
     pass
-
-
-
-
-
 
 if __name__=="__main__":
     main()

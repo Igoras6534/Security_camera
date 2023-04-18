@@ -13,7 +13,7 @@ c_time=0
 p_time=0
 detector=pm.poseDetector()
 
-yourmail="ignatiukigor48@gmail.com"
+yourmail="....."#Email receiver
 email_sender=EmailSender()
 
 
@@ -39,7 +39,7 @@ while True:
             path=datetime.datetime.now().strftime("%d-%m-%Y-%H-%M-%S")
             out=cv2.VideoWriter(f"videos/{path}.mp4",fourcc,20,frame_size)#Make a folder for videos in order to keep everything clean 
             print("Started recording")
-            email_sender.send_email(yourmail)# A person you want to send the notification
+            email_sender.send_email(yourmail)
     elif pose_found == False:
         if timer_started:
             if time.time()-detection_stopped_time>=seconds:

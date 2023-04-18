@@ -15,6 +15,7 @@ class EmailSender():
         self.simple_email_context = ssl.create_default_context()
 
     def send_email(self, email_to):
+        print(self.pswd,self.email_from)
         message= "Someone has appeared on your camera. "
         subject = 'Security camera started recording!'
         msg = EmailMessage()
@@ -27,7 +28,7 @@ class EmailSender():
         context = ssl.create_default_context()
 
         # Log in and send the email
-        with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
+        with smtplib.SMTP_SSL('smtp.gmail.com', self.smtp_port, context=context) as smtp:
             smtp.login(self.email_from,self.pswd)
             smtp.sendmail(self.email_from, email_to, msg.as_string()) 
             print("Email has been successfully sended :-)")
@@ -49,7 +50,7 @@ class EmailSender():
             file_data=f.read()
             file_name=f.name
         msg.add_attachment(file_data,maintype='video',subtype='mp4',filename=file_name)
-        with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
+        with smtplib.SMTP_SSL('smtp.gmail.com', self.smtp_port, context=context) as smtp:
             smtp.login(self.email_from,self.pswd)
             smtp.send_message(msg)
         print("Stopped recording")
